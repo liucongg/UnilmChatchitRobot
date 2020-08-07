@@ -26,7 +26,7 @@ def is_chinese_char(text):
     return False
 
 
-# 将清洗过语料进行融合及过滤，生成unilm所需要得数据格式
+# 将对话预料构建成unilm所需要得数据格式，并过滤无效数据
 def build_data_for_train(path, save_path):
     sample_list = []
     with open(path, "r", encoding="utf-8") as fh:

@@ -43,7 +43,7 @@ def main():
     parser.add_argument('--device', default='0', type=str, help='生成设备')
     parser.add_argument('--topk', default=4, type=int, help='取前k个词')
     parser.add_argument('--topp', default=0.0, type=float, help='取超过p的词')
-    parser.add_argument('--dirty_path', default='/data/dirty_words.txt', type=str, help='敏感词库')
+    parser.add_argument('--dirty_path', default='data/dirty_words.txt', type=str, help='敏感词库')
     parser.add_argument('--model_name_or_path', default='kuakua_robot_model/', type=str, help='模型路径')
     parser.add_argument('--repetition_penalty', default=1.5, type=float, help="重复词的惩罚项")
     parser.add_argument('--max_len', type=int, default=25, help='生成的对话的最大长度')
@@ -67,10 +67,10 @@ def main():
     while True:
         try:
             text = input("user:")
-            if remove_dirty_sentence(text):
-                print("chatbot:" + "换个话题聊聊吧")
+            if remove_dirty_sentence(dirty_obj, text):
+                print("chatbot:" + "换个话题聊聊吧。")
                 continue
-            input_ids = tokenizer.encode(dirty_obj, text)
+            input_ids = tokenizer.encode(text)
             token_type_ids = [4] * len(input_ids)
             generated = []
             for _ in range(args.max_len):
@@ -84,11 +84,10 @@ def main():
                 next_token_logits = outputs[-1, -1, :]
                 for id in set(generated):
                     next_token_logits[id] /= args.repetition_penalty
-                # next_token_logits = next_token_logits / args.temperature
                 next_token_logits[tokenizer.convert_tokens_to_ids('[UNK]')] = -float('Inf')
                 filtered_logits = top_k_top_p_filtering(next_token_logits, top_k=args.topk, top_p=args.topp)
                 next_token = torch.multinomial(F.softmax(filtered_logits, dim=-1), num_samples=1)
-                if next_token == tokenizer.sep_token_id:  # 遇到[SEP]则表明response生成结束
+                if next_token == tokenizer.sep_token_id:  # 遇到[SEP]则表明生成结束
                     break
                 generated.append(next_token.item())
                 input_ids.append(next_token.item())
@@ -96,11 +95,11 @@ def main():
             text = tokenizer.convert_ids_to_tokens(generated)
             text = remove_multi_symbol("".join(text))
             if remove_dirty_sentence(dirty_obj, text):
-                print("chatbot:" + "我要想一想")
+                print("chatbot:" + "我要想一想。")
             else:
                 print("chatbot:" + text)
         except:
-            print("换个话题聊聊")
+            print("chatbot:" + "说点别的吧，好吗？")
 
 
 if __name__ == "__main__":
