@@ -1,6 +1,4 @@
 # coding=utf-8
-"""Tokenization classes for UniLM."""
-
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging

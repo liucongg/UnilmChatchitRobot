@@ -1,18 +1,11 @@
 # coding=utf-8
-
-""" UniLM model configuration """
-
 from __future__ import absolute_import, division, print_function, unicode_literals
-
 import json
 import logging
-import sys
 from io import open
-
 from transformers.configuration_utils import PretrainedConfig
 
 logger = logging.getLogger(__name__)
-
 UNILM_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     'unilm-large-cased': "https://s3.amazonaws.com/models.huggingface.co/bert/unilm/unilm-large-cased-config.json", 
     'unilm-base-cased': "https://s3.amazonaws.com/models.huggingface.co/bert/unilm/unilm-base-cased-config.json"
