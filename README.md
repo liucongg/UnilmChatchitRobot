@@ -2,7 +2,7 @@
 
 ## 描述
 * 本项目使用[unilm模型](https://github.com/YunwenTechnology/Unilm)训练了一个夸夸式的闲聊机器人。
-* 详细介绍见知乎：[夸夸式闲聊机器人之Unilm对话生成]()
+* 详细介绍见知乎：[夸夸式闲聊机器人之Unilm对话生成](https://zhuanlan.zhihu.com/p/170358507)
 
 
 ## 数据及模型
