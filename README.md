@@ -14,7 +14,7 @@
 ## Train
 ```
 nohup python3 -u run_train.py --data_dir data/ 
-                              --src_file merge_data.json 
+                              --src_file kuakua_data.json 
                               --model_type unilm 
                               --model_name_or_path unilm_model/ 
                               --output_dir kuakua_robot_model/ 
