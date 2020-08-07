@@ -12,7 +12,13 @@ import os
 import argparse
 import re
 from dirty_recognize import dirty_reg
-from data_helper import remove_dirty_sentence
+
+
+def remove_dirty_sentence(dirty_obj, sentence):
+    if len(dirty_obj.match(sentence)) == 0:
+        return False
+    else:
+        return True
 
 
 def remove_multi_symbol(text):
@@ -41,12 +47,12 @@ def top_k_top_p_filtering(logits, top_k=0, top_p=0.0, filter_value=-float('Inf')
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--device', default='0', type=str, help='生成设备')
-    parser.add_argument('--topk', default=4, type=int, help='取前k个词')
-    parser.add_argument('--topp', default=0.0, type=float, help='取超过p的词')
+    parser.add_argument('--topk', default=3, type=int, help='取前k个词')
+    parser.add_argument('--topp', default=0.95, type=float, help='取超过p的词')
     parser.add_argument('--dirty_path', default='data/dirty_words.txt', type=str, help='敏感词库')
     parser.add_argument('--model_name_or_path', default='kuakua_robot_model/', type=str, help='模型路径')
-    parser.add_argument('--repetition_penalty', default=1.5, type=float, help="重复词的惩罚项")
-    parser.add_argument('--max_len', type=int, default=25, help='生成的对话的最大长度')
+    parser.add_argument('--repetition_penalty', default=1.2, type=float, help="重复词的惩罚项")
+    parser.add_argument('--max_len', type=int, default=32, help='生成的对话的最大长度')
     parser.add_argument('--no_cuda', type=bool, default=True, help='是否使用GPU进行预测')
 
     args = parser.parse_args()
