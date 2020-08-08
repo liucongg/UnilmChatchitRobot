@@ -12,6 +12,7 @@ class Trie:
 
     def insert(self, word):
         curNode = self.root
+
         for c in word:
             if not c in curNode:
                 curNode[c] = {}
@@ -20,6 +21,7 @@ class Trie:
 
     def search(self, word):
         curNode = self.root
+
         for c in word:
             if not c in curNode:
                 return False
@@ -31,6 +33,7 @@ class Trie:
 
     def startsWith(self, pcurNodeix):
         curNode = self.root
+
         for c in pcurNodeix:
             if not c in curNode:
                 return False

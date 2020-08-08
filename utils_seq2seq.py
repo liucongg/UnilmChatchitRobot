@@ -1,13 +1,13 @@
 # coding=utf-8
-
-
 from random import randint, shuffle, choice
 from random import random as rand
 import math
 import numpy as np
 import torch
 import torch.utils.data
-
+from functools import partial
+from multiprocessing import Pool, cpu_count
+from tqdm import tqdm
 
 
 def get_random_word(vocab_words):
@@ -78,8 +78,6 @@ class Pipeline():
     def __call__(self, instance):
         raise NotImplementedError
 
-    # pre_whole_word: tokenize to words before masking
-    # post whole word (--mask_whole_word): expand to words after masking
     def get_masked_pos(self, tokens, n_pred, add_skipgram=False, mask_segment=None, protect_range=None):
         if self.pre_whole_word:
             pre_word_split = _get_word_split_index(tokens, 0, len(tokens))
@@ -88,7 +86,6 @@ class Pipeline():
 
         span_list = list(zip(pre_word_split[:-1], pre_word_split[1:]))
 
-        # candidate positions of masked tokens
         cand_pos = []
         special_pos = set()
         if mask_segment:
@@ -140,7 +137,6 @@ class Pipeline():
             st_span, end_span = i_span, i_span + n_span
 
             if self.mask_whole_word:
-                # pre_whole_word==False: position index of span_list is the same as tokens
                 st_span, end_span = _expand_whole_word(
                     tokens, st_span, end_span)
 
@@ -160,7 +156,6 @@ class Pipeline():
                     masked_pos.add(pos)
         masked_pos = list(masked_pos)
         if len(masked_pos) > n_pred:
-            # shuffle(masked_pos)
             masked_pos = masked_pos[:n_pred]
         return masked_pos
 
@@ -180,14 +175,6 @@ class Pipeline():
             prev_pos, prev_rand = pos, t_rand
 
 
-# Input file format :
-# 1. One sentence per line. These should ideally be actual sentences,
-#    not entire paragraphs or arbitrary spans of text. (Because we use
-#    the sentence boundaries for the "next sentence prediction" task).
-# 2. Blank lines between documents. Document boundaries are needed
-#    so that the "next sentence prediction" task doesn't span between documents.
-
-
 def truncate_tokens_pair(tokens_a, tokens_b, max_len):
     if len(tokens_a) + len(tokens_b) > max_len-3:
         while len(tokens_a) + len(tokens_b) > max_len-3:
@@ -204,11 +191,6 @@ def truncate_tokens_signle(tokens_a, max_len):
     return tokens_a
 
 
-from functools import partial
-from multiprocessing import Pool, cpu_count
-from tqdm import tqdm
-
-
 class Seq2SeqDataset(torch.utils.data.Dataset):
     """ Load sentence pair (sequential or random order) from corpus """
     def __init__(self, file, batch_size, tokenizer, max_len, short_sampling_prob=0.1, sent_reverse_order=False, bi_uni_pipeline=[]):
@@ -219,20 +201,8 @@ class Seq2SeqDataset(torch.utils.data.Dataset):
         self.bi_uni_pipeline = bi_uni_pipeline
         self.batch_size = batch_size
         self.sent_reverse_order = sent_reverse_order
-
-        # read the file into memory
         self.ex_list = []
-        # with open(file, "r", encoding='utf-8') as f:
-        #     for i, line in enumerate(f):
-        #         sample = eval(line.strip())
-        #         src_tk = tokenizer.tokenize(sample["src_text"])
-        #         tgt_tk = tokenizer.tokenize(sample["tgt_text"])
-        #         assert len(src_tk) > 0
-        #         assert len(tgt_tk) > 0
-        #         self.ex_list.append((src_tk, tgt_tk))
-
         file_data = open(file, "r", encoding='utf-8')
-        #
         threads = min(8, cpu_count())
         with Pool(threads) as p:
             annotate_ = partial(
@@ -245,11 +215,7 @@ class Seq2SeqDataset(torch.utils.data.Dataset):
                     desc="convert squad examples to features",
                 )
             )
-        # fin = open("look_new.json", "w",encoding="utf-8")
-        # for jj, m in enumerate(self.ex_list):
-        #     fin.write(str(jj)+"\t"+str(m)+"\n")
         print('Load {0} documents'.format(len(self.ex_list)))
-        # exit()
     def read_data(self, line, tokenizer):
         sample = eval(line.strip())
         # src_tk = tokenizer.tokenize(sample["src_text"])
@@ -263,19 +229,17 @@ class Seq2SeqDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         instance = self.ex_list[idx]
-        # proc = choice(self.bi_uni_pipeline)
         new_instance = ()
         for proc in self.bi_uni_pipeline:
             new_instance += proc(instance)
         return new_instance
 
-    def __iter__(self):  # iterator to load data
+    def __iter__(self):
         for __ in range(math.ceil(len(self.ex_list) / float(self.batch_size))):
             batch = []
             for __ in range(self.batch_size):
                 idx = randint(0, len(self.ex_list)-1)
                 batch.append(self.__getitem__(idx))
-            # To Tensor
             yield batch_list_to_batch_tensors(batch)
 
 

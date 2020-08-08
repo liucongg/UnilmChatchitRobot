@@ -61,8 +61,6 @@ def main():
     print('using device:{}'.format(device))
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
     os.environ["CUDA_VISIBLE_DEVICES"] = args.device
-
-
     config = UnilmConfig.from_pretrained(args.model_name_or_path, max_position_embeddings=512)
     tokenizer = UnilmTokenizer.from_pretrained(args.model_name_or_path, do_lower_case=False)
     model = UnilmForSeq2SeqDecodeSample.from_pretrained(args.model_name_or_path, config=config)

@@ -1,5 +1,4 @@
 # coding=utf-8
-
 import os
 import logging
 import glob
@@ -14,7 +13,6 @@ import torch
 from torch.utils.data import RandomSampler
 from torch.utils.data.distributed import DistributedSampler
 import torch.distributed as dist
-
 from tokenization_unilm import UnilmTokenizer, WhitespaceTokenizer
 from modeling_unilm import UnilmForSeq2Seq, UnilmConfig
 from transformers import AdamW, get_linear_schedule_with_warmup
@@ -24,12 +22,12 @@ except ImportError:
     from tensorboardX import SummaryWriter
 import utils_seq2seq
 
+
 ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys())
                   for conf in (UnilmConfig,)), ())
 MODEL_CLASSES = {
     'unilm': (UnilmConfig, UnilmForSeq2Seq, UnilmTokenizer)
 }
-
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
                     level=logging.INFO)

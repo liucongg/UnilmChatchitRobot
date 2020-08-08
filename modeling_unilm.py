@@ -1,10 +1,7 @@
 # coding=utf-8
-"""PyTorch UniLM model. """
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-
 import copy
 import math
 import logging
@@ -18,12 +15,10 @@ from configuration_unilm import UnilmConfig
 from transformers.modeling_bert import load_tf_weights_in_bert, BertPooler, BertIntermediate, BertOutput, BertPredictionHeadTransform, BertSelfOutput, BertLMPredictionHead, BertOnlyMLMHead, BertOnlyMLMHead, BertEmbeddings, BertOnlyNSPHead
 
 logger = logging.getLogger(__name__)
-
 UNILM_PRETRAINED_MODEL_ARCHIVE_MAP = {
     'unilm-base-cased': "",
     'unilm-large-cased': ""
 }
-
 BertLayerNorm = torch.nn.LayerNorm
 
 
