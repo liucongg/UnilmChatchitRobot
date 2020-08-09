@@ -53,7 +53,7 @@ def main():
     parser.add_argument('--model_name_or_path', default='kuakua_robot_model/', type=str, help='模型路径')
     parser.add_argument('--repetition_penalty', default=1.2, type=float, help="重复词的惩罚项")
     parser.add_argument('--max_len', type=int, default=32, help='生成的对话的最大长度')
-    parser.add_argument('--no_cuda', type=bool, default=True, help='是否使用GPU进行预测')
+    parser.add_argument('--no_cuda', type=bool, default=False, help='是否使用GPU进行预测')
 
     args = parser.parse_args()
     args.cuda = torch.cuda.is_available() and not args.no_cuda
