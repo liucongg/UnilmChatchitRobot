@@ -1,15 +1,28 @@
 # Unilm for Chinese Chitchat Robot
+基于Unilm模型的夸夸式闲聊机器人项目
 
-## 描述
+## 项目描述
+* 本项目是一个基于Unilm模型的夸夸式闲聊机器人项目。
 * 本项目使用[unilm模型](https://github.com/YunwenTechnology/Unilm)训练了一个夸夸式的闲聊机器人。
-* 详细介绍见知乎：[夸夸式闲聊机器人之Unilm对话生成](https://zhuanlan.zhihu.com/p/170358507)
+* 详细介绍见知乎：[夸夸式闲聊机器人之Unilm对话生成](https://zhuanlan.zhihu.com/p/170358507)。
+* 在最后对话生成时，对生成的敏感词进行了过滤。
 
+## 文件结构
+* kuakua_robot_model 模型保存路径（模型下载，见数据及模型）
+* unilm_model 预训练unilm模型路径（模型下载，见[Unilm预训练模型](https://github.com/YunwenTechnology/Unilm)）
+* data_dir 存放数据的文件夹
+   * dirty_words.txt 敏感词词典
+   * douban_kuakua_qa.txt 原始豆瓣夸夸群语料
+   * sample.json 训练集样例，需要将原始数据处理成样例形式（项目未提供预处理代码）
+* configuration_unilm.py unilm模型的config文件
+* modeling_unilm.py unilm模型文件
+* run_train.py 模型训练文件
+* interactive_conditional_samples.py 预测文件，根据训练好的模型，进行对话生成
 
 ## 数据及模型
 * 原始语料来自豆瓣夸夸群数据，见data/douban_kuakua_qa.txt。
 * 经过清洗后，得到了6万多单轮对话数据，数据格式见data/sample.json。
 * 已训练好的模型，下载地址：[链接](https://pan.baidu.com/s/1OWxxeGC2rndwVCGav8kbqQ)，验证码： [e0au]()
-
 
 ## Train
 ```
@@ -92,7 +105,33 @@ chatbot:你真的很棒，我也在减肥
 ## 不足
 本模型最大的问题是，在训练模型时，没有考虑上下文信息，也就是训练是针对单轮对话进行的，因此可能会出现文不对题的情况。
 
-## 作者
+## 未来工作
+- [ ] 后期可能将项目增加详细注释，增加数据预处理部分代码。
+- [ ] 后期可能使用大批量数据训练一个效果更好的基于unilm的闲聊对话模型。
+- [ ] 后期可能考虑上下文，训练一个支持多轮对话的模型。
+
+
+## 参考
+* [Unilm](https://github.com/YunwenTechnology/Unilm)
+
+## Citing
+```
+@misc{UnilmChatchitRobot,
+  author = {Cong Liu},
+  title = {Unilm for Chinese Chitchat Robot},
+  year = {2019},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url="https://github.com/liucongg/UnilmChatchitRobot",
+}
+```
+
+## 联系作者
+e-mail：logcongcong@gmail.com
+
 * 知乎：[刘聪NLP](https://www.zhihu.com/people/LiuCongNLP)
 * 知乎专栏：[NLP工作站](https://zhuanlan.zhihu.com/c_1131882304422936576)
 * Github: [liucongg](https://github.com/liucongg)
+* 公众号：[NLP工作站]()
+
+![](image/logcong.png)
