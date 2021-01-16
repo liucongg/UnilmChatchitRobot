@@ -4,7 +4,6 @@
 ## 项目描述
 * 本项目是一个基于Unilm模型的夸夸式闲聊机器人项目。
 * 本项目目前开源的模型仅使用豆瓣夸夸群数据训练，所以称之为夸夸式闲聊机器人。感兴趣的同学，也可以使用本项目代码对其他对话语料进行训练。
-* 本项目使用[unilm模型](https://github.com/YunwenTechnology/Unilm)训练了一个夸夸式的闲聊机器人。
 * 详细介绍见知乎：[夸夸式闲聊机器人之Unilm对话生成](https://zhuanlan.zhihu.com/p/170358507)。
 * 在最后对话生成时，对生成的敏感词进行了过滤。
 
@@ -128,8 +127,7 @@ chatbot:你真的很棒，我也在减肥
 ```
 
 ## 联系作者
-e-mail：logcongcong@gmail.com
-
+* e-mail：logcongcong@gmail.com
 * 知乎：[刘聪NLP](https://www.zhihu.com/people/LiuCongNLP)
 * 知乎专栏：[NLP工作站](https://zhuanlan.zhihu.com/c_1131882304422936576)
 * Github: [liucongg](https://github.com/liucongg)
