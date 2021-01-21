@@ -19,6 +19,10 @@
 * run_train.py 模型训练文件
 * interactive_conditional_samples.py 预测文件，根据训练好的模型，进行对话生成
 
+## 运行环境
+* transformers == 3.0.2
+* pytorch >= 1.4
+
 ## 数据及模型
 * 原始语料来自豆瓣夸夸群数据，见data/douban_kuakua_qa.txt。
 * 经过清洗后，得到了6万多单轮对话数据，数据格式见data/sample.json。
